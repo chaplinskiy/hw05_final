@@ -9,13 +9,10 @@
           {% include "include/posts/index_card.html" with post=post %}
       </div>
       <div class="col-md-9">
-        {# {% load cache %} #}
-        {# {% cache 20 index_page %} #}
         {% include "include/menu.html" with index=True %}
         {% for post in page %}
           {% include "include/posts/post_item.html" with post=post %}
         {% endfor %}
-        {# {% endcache %} #}
         {% include "include/paginator.html" with items=page paginator=paginator %}
       </div>
     </div>

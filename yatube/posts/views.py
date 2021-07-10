@@ -80,8 +80,7 @@ def post_view(request, username, post_id):
             user=request.user,
             author=author
         ).exists()
-    # ШТОА
-    form = CommentForm(instance=None)
+    form = CommentForm()
     comments = Comment.objects.filter(post=post_current)
     context = {
         'author': author,
@@ -127,12 +126,10 @@ def post_edit(request, username, post_id):
         files=request.FILES or None,
         instance=post
     )
-    # так в тренажере. уточнить, для чего два раза проверяется POST:
-    if request.method == 'POST':
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('post', username, post_id)
+    if form.is_valid():
+        post = form.save(commit=False)
+        post.save()
+        return redirect('post', username, post_id)
     context = {
         'form': form,
         'is_edit': True,
@@ -141,9 +138,6 @@ def post_edit(request, username, post_id):
     return render(
         request,
         'posts/new_post.html',
-        # {'form': form,
-        #  'is_edit': True,
-        #  }
         context
     )
 
@@ -153,7 +147,6 @@ def add_comment(request, username, post_id):
     post = get_object_or_404(Post, author__username=username, id=post_id)
     form = CommentForm(request.POST or None)
     if form.is_valid():
-        # почему commit=False (тут и везде)?
         comment = form.save(commit=False)
         comment.post = post
         comment.author = request.user
