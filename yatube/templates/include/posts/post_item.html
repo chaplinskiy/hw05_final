@@ -11,7 +11,6 @@
       {{ post.text|linebreaksbr }}
     </p>
 
-    <!-- Если пост относится к какому-нибудь сообществу, то отобразим ссылку на него через # -->
     {% if post.group %}
       <a class="card-link muted" href="{% url 'group_posts' post.group.slug %}">
         <strong class="d-block text-gray-dark">#{{ post.group.title }}</strong>
