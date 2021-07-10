@@ -1,0 +1,25 @@
+<div class="card">
+    <div class="card-body">
+    {# <div class="h2"> #}
+        {# {{ author.get_full_name }} #}
+    {# </div> #}
+    <div class="h2 text-muted">
+        <span style="color:red">Ya</span>tube</a>
+        {# @{{ author.username }} #}
+    </div>
+    </div>
+    <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <div class="h6 text-muted">
+            <a class="text-muted" href="{% url 'about:author' %}">Об авторе</a>
+            <br>
+            <a class="text-muted" href="{% url 'about:tech' %}">Технологии</a>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <div class="h6 text-muted">
+        Записей: {{ posts_total }}
+        </div>
+    </li>
+    </ul>
+</div>
