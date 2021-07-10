@@ -133,12 +133,18 @@ def post_edit(request, username, post_id):
             post = form.save(commit=False)
             post.save()
             return redirect('post', username, post_id)
+    context = {
+        'form': form,
+        'is_edit': True,
+        'post': post
+    }
     return render(
         request,
         'posts/new_post.html',
-        {'form': form,
-         'is_edit': True,
-         }
+        # {'form': form,
+        #  'is_edit': True,
+        #  }
+        context
     )
 
 
