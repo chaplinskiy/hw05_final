@@ -85,11 +85,11 @@ class ViewsTest(TestCase):
         """Новая запись пользователя появляется в ленте тех, кто на него
         подписан и не появляется в ленте тех, кто не подписан на него"""
         Follow.objects.create(user=self.user, author=self.author)
-        Post.objects.create(author=self.author, text='Follow me')
+        post_to_follow = Post.objects.create(author=self.author, text='Follow me')
         response_1 = self.authorized_client.get(reverse('follow_index'))
         response_2 = self.whoyauthor_client.get(reverse('follow_index'))
-        self.assertEqual(response_1.context['posts_total'], 1)
-        self.assertEqual(response_2.context['posts_total'], 0)
+        self.assertIn(str(post_to_follow), str(response_1.content))
+        self.assertNotIn(str(post_to_follow), str(response_2.content))
 
     def test_pages_use_correct_template(self):
         templates_pages_names = {
