@@ -262,7 +262,7 @@ class PaginatorViewsTest(TestCase):
             Post.objects.create(
                 author=cls.user,
                 group=cls.group,
-                text='Some test post text'
+                text=f'Some test post text {i + 1}'
             )
 
     def setUp(self):
