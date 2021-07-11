@@ -70,16 +70,37 @@ class ViewsTest(TestCase):
         )
         self.assertEqual(comment.text, self.post.comments.last().text)
 
-    def test_follow_unfollow_authorized(self):
+    def test_follow_authorized(self):
         """Авторизованный пользователь может подписываться и отписываться"""
         following = self.author.following.count()
         follower = self.user.follower.count()
-        self.authorized_client.get(f'/{self.author}/follow/')
+        self.authorized_client.get(
+            reverse(
+                'profile_follow',
+                kwargs={'username': self.author.username}
+            )
+        )
         self.assertEqual(self.author.following.count(), following + 1)
         self.assertEqual(self.user.follower.count(), follower + 1)
-        self.authorized_client.get(f'/{self.author}/unfollow/')
-        self.assertEqual(self.author.following.count(), following)
-        self.assertEqual(self.user.follower.count(), follower)
+
+    def test_unfollow_authorized(self):
+        """Авторизованный пользователь может подписываться и отписываться"""
+        self.authorized_client.get(
+            reverse(
+                'profile_follow',
+                kwargs={'username': self.author.username}
+            )
+        )
+        following = self.author.following.count()
+        follower = self.user.follower.count()
+        self.authorized_client.get(
+            reverse(
+                'profile_unfollow',
+                kwargs={'username': self.author.username}
+            )
+        )
+        self.assertEqual(self.author.following.count(), following - 1)
+        self.assertEqual(self.user.follower.count(), follower - 1)
 
     def test_follow_index(self):
         """Новая запись пользователя появляется в ленте тех, кто на него
