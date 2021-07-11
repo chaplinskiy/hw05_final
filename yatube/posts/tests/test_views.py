@@ -247,6 +247,7 @@ class ViewsTest(TestCase):
         self.assertEqual(response_3.context['posts_total'], 1)
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class PaginatorViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -264,6 +265,11 @@ class PaginatorViewsTest(TestCase):
                 group=cls.group,
                 text=f'Some test post text {i + 1}'
             )
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
 
     def setUp(self):
         cache.clear()
@@ -309,6 +315,7 @@ class PaginatorViewsTest(TestCase):
                 )
 
 
+@override_settings(MEDIA_ROOT=MEDIA_ROOT)
 class GroupViewsTest(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -329,6 +336,11 @@ class GroupViewsTest(TestCase):
             group=cls.group1,
             text='Some test post text'
         )
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
 
     def setUp(self):
         cache.clear()
