@@ -4,7 +4,7 @@ from http import HTTPStatus
 from django.core.cache import cache
 from django.test import Client, TestCase
 
-from ..models import Follow, Group, Post, User
+from ..models import Group, Post, User
 
 
 class StaticURLTests(TestCase):
@@ -19,42 +19,14 @@ class StaticURLTests(TestCase):
             title='Test Group',
             slug='test-group'
         )
-        cls.following_user = User.objects.create_user(
-            username='FollowingTester'
-        )
-        cls.not_following_user = User.objects.create_user(
-            username='NotFollowingTester'
-        )
         cls.post = Post.objects.create(
             author=cls.user,
             group=cls.group,
             text='Some test post text'
         )
-        cls.follow = Follow.objects.create(
-            user=cls.user,
-            author=cls.following_user
-        )
 
     def setUp(self):
         cache.clear()
-
-    def test_follow(self):
-        """Новая запись пользователя появляется в ленте тех, кто на него
-        подписан и не появляется в ленте тех, кто не подписан на него"""
-        post_to_follow = Post.objects.create(
-            author=self.follow.author,
-            text='Follow me'
-        )
-        post_list_following = Post.objects.filter(
-            author__following__user=self.user
-        )
-        post_list_not_following = Post.objects.filter(
-            author__following__user=self.not_following_user
-        )
-        self.assertIn(post_to_follow.text, post_list_following.last().text)
-        self.assertIsNone(
-            post_list_not_following.last()
-        )
 
     def test_http_status_is_ok_for_guest_client(self):
         group = self.group
@@ -120,7 +92,6 @@ class StaticURLTests(TestCase):
         for template, urls in templates_url_names.items():
             with self.subTest(urls=urls):
                 for url in urls:
-                    # cache.clear()
                     response = self.authorized_client.get(url)
                 self.assertTemplateUsed(response, template)
 

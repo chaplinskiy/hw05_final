@@ -162,11 +162,8 @@ def follow_index(request):
     paginator = Paginator(post_list, ITEMS_PER_PAGE)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    return render(
-        request,
-        'follow.html',
-        {'page': page, 'posts_total': posts_total, }
-    )
+    context = {'page': page, 'posts_total': posts_total}
+    return render(request, 'follow.html', context)
 
 
 @login_required

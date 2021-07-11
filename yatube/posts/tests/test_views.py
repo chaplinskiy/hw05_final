@@ -5,6 +5,7 @@ from django import forms
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.http import response
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
@@ -21,9 +22,13 @@ class ViewsTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.guest_client = Client()
+        cls.author = User.objects.create_user(username='FollowTester')
+        cls.whoyauthor = User.objects.create_user(username='NotFollowTester')
         cls.user = User.objects.create_user(username='ViewsTester')
         cls.authorized_client = Client()
         cls.authorized_client.force_login(cls.user)
+        cls.whoyauthor_client = Client()
+        cls.whoyauthor_client.force_login(cls.whoyauthor)
         cls.group = Group.objects.create(
             title='Test Group',
             slug='test-group',
@@ -66,16 +71,26 @@ class ViewsTest(TestCase):
         )
         self.assertEqual(comment.text, self.post.comments.last().text)
 
-    def test_follow_authorized(self):
+    def test_follow_unfollow_authorized(self):
         """Авторизованный пользователь может подписываться и отписываться"""
-        author = User.objects.create_user(username='FollowTester')
-        follow = Follow.objects.create(
-            user=self.user,
-            author=author
-        )
-        self.assertEqual(self.post.author.follower.count(), 1)
-        follow.delete()
-        self.assertEqual(self.post.author.follower.count(), 0)
+        following = self.author.following.count()
+        follower = self.user.follower.count()
+        self.authorized_client.get(f'/{self.author}/follow/')
+        self.assertEqual(self.author.following.count(), following + 1)
+        self.assertEqual(self.user.follower.count(), follower + 1)
+        self.authorized_client.get(f'/{self.author}/unfollow/')
+        self.assertEqual(self.author.following.count(), following)
+        self.assertEqual(self.user.follower.count(), follower)
+
+    def test_follow_index(self):
+        """Новая запись пользователя появляется в ленте тех, кто на него
+        подписан и не появляется в ленте тех, кто не подписан на него"""
+        Follow.objects.create(user=self.user, author=self.author)
+        Post.objects.create(author=self.author, text='Follow me')
+        response_1 = self.authorized_client.get(reverse('follow_index'))
+        response_2 = self.whoyauthor_client.get(reverse('follow_index'))
+        self.assertEqual(response_1.context['posts_total'], 1)
+        self.assertEqual(response_2.context['posts_total'], 0)
 
     def test_pages_use_correct_template(self):
         templates_pages_names = {
