@@ -71,7 +71,7 @@ class ViewsTest(TestCase):
         self.assertEqual(comment.text, self.post.comments.last().text)
 
     def test_follow_authorized(self):
-        """Авторизованный пользователь может подписываться и отписываться"""
+        """Авторизованный пользователь может подписываться"""
         following = self.author.following.count()
         follower = self.user.follower.count()
         self.authorized_client.get(
@@ -84,7 +84,7 @@ class ViewsTest(TestCase):
         self.assertEqual(self.user.follower.count(), follower + 1)
 
     def test_unfollow_authorized(self):
-        """Авторизованный пользователь может подписываться и отписываться"""
+        """Авторизованный пользователь может отписываться"""
         self.authorized_client.get(
             reverse(
                 'profile_follow',
