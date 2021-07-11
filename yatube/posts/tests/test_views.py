@@ -85,7 +85,10 @@ class ViewsTest(TestCase):
         """Новая запись пользователя появляется в ленте тех, кто на него
         подписан и не появляется в ленте тех, кто не подписан на него"""
         Follow.objects.create(user=self.user, author=self.author)
-        post_to_follow = Post.objects.create(author=self.author, text='Follow me')
+        post_to_follow = Post.objects.create(
+            author=self.author,
+            text='Follow me'
+        )
         response_1 = self.authorized_client.get(reverse('follow_index'))
         response_2 = self.whoyauthor_client.get(reverse('follow_index'))
         self.assertIn(str(post_to_follow), str(response_1.content))
