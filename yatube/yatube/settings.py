@@ -14,6 +14,8 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "[::1]",
     "testserver",
+    "www.chaplinskiy.pythonanywhere.com",
+    "chaplinskiy.pythonanywhere.com",
 ]
 
 
@@ -29,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'sorl.thumbnail',
 ]
 
@@ -40,6 +43,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'yatube.urls'
@@ -128,11 +132,15 @@ LOGIN_REDIRECT_URL = "index"
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
-ALLOWED_HOSTS = [
-    "localhost",
+# ALLOWED_HOSTS = [
+#     "localhost",
+#     "127.0.0.1",
+#     "[::1]",
+#     "testserver",
+# ]
+
+INTERNAL_IPS = [
     "127.0.0.1",
-    "[::1]",
-    "testserver",
 ]
 
 CACHES = {

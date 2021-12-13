@@ -8,7 +8,8 @@
     </div>
     </div>
     <ul class="list-group list-group-flush">
-        {% if author.username != request.user.username %}    
+        <!-- <h2>{{request.user}}</h2> -->
+        {% if user.is_authenticated and author.username != request.user.username %}    
         <li class="list-group-item">
             {% if following %}
             <a
