@@ -27,7 +27,7 @@ python3 -m venv env
 ```
 
 ```bash
-source env/bin/activate
+source venv/bin/activate
 ```
 
 ```bash
