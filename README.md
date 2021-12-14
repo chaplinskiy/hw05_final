@@ -43,7 +43,7 @@ pip install -r requirements.txt
 Выполнить миграции:
 
 ```bash
-cd api_yamdb/ && python3 manage.py migrate
+cd yatube/ && python3 manage.py migrate
 ```
 
 Запустить проект:
@@ -57,6 +57,12 @@ python3 manage.py runserver
 *из корневой папки, при запущенном виртуальном окружении*
 ```bash
 pytest
+```
+
+### Шаблон наполнения env-файла
+см.
+```bash
+.env.template
 ```
 
 

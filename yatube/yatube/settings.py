@@ -4,10 +4,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4i%7ggkrkk1p(wpysg(18r*q1p*o-uq*4awc=is9)jt+2chegl'
+SECRET_KEY = os.getenv('SECRET_KEY', default='qwertyuiopasdfghjklzxcvbnm123456789098765432123456')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
