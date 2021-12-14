@@ -158,6 +158,6 @@ yatube/media/
 tmp*/
 
 # дампы БД
-dump.*
+yatube/dump.json
 
 
